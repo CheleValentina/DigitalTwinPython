@@ -3,52 +3,72 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 import re
 
-data = pd.read_csv("datasets/wind-turbine-scada-dataset/T1.csv").rename(
-    columns={"Date/Time": "Date",
-             "LV ActivePower (kW)": "Active_Power(kW)",
-             "Wind Speed (m/s)": "Wind_Speed(m/s)",
-             "Theoretical_Power_Curve (KWh)": "Theoretical_Power(kWh)",
-             "Wind Direction (°)": "Wind_Direction"
-             }
-).round(2)
 
-
-def plot_data_information():
-    plt.axis('off')
-    plt.table(cellText=data.head().values, colLabels=data.head().columns, loc='center')
-    plt.savefig('plots/sample_of_data.png', bbox_inches='tight', pad_inches=0.25, dpi=500)
+# ToDo before calling this function check the frequency of plotting the user wants - e.g hourly
+# ToDo before calling this function check the feature the user wants - e.g Active_Power, Loss
+# date type 2022-06-07
+def plot_data_between_date_interval(data, initial_date, last_date, feature, filename):
+    data[initial_date:last_date][feature].plot(figsize=(15, 7))
+    plt.savefig(filename, bbox_inches='tight', pad_inches=0.25, dpi=500)
     plt.clf()
 
 
-def plot_data_statistics():
+def plot_data_information(data, filename):
+    plt.clf()
+    plt.axis('off')
+    plt.table(cellText=data.head().values.round(2), colLabels=data.head().columns, loc='center')
+    plt.savefig(filename, bbox_inches='tight', pad_inches=0.25, dpi=500)
+    plt.clf()
+
+
+def plot_data_statistics(data, filename):
     plt.axis('off')
     plt.table(cellText=data.describe().values.round(2), colLabels=data.describe().columns,
               loc='center', rowLabels=data.describe().index)
-    plt.savefig('plots/describe_data.png', bbox_inches='tight', pad_inches=0.25, dpi=500)
+    plt.savefig(filename, bbox_inches='tight', pad_inches=0.25, dpi=500)
     plt.clf()
 
 
-def plot_speed_power_relation():
-    sb.histplot(data=data, y='Active_Power(kW)', x='Wind_Speed(m/s)')
-    plt.savefig('plots/speed_power_relation.png', transparent=True)
+def plot_speed_power_relation(data, folder_name):
+    sb.histplot(data=data, y='Active_Power', x='Wind_Speed')
+    plt.savefig(folder_name + '/speed_power_relation.png', transparent=True)
     plt.clf()
 
-    sb.histplot(data=data, y='Theoretical_Power(kWh)', x='Wind_Speed(m/s)')
-    plt.savefig('plots/speed_theoretical_power_relation.png', transparent=True)
+    sb.histplot(data=data, y='Theoretical_Power', x='Wind_Speed')
+    plt.savefig(folder_name + '/speed_theoretical_power_relation.png', transparent=True)
     plt.clf()
 
 
-def plot_data_distribution():
+def plot_data_distribution(data, folder_name):
     for feature in data.columns:
-        if feature != "Date":
-            sb.histplot(data=data, x=feature, fill=False, element='step')
-            plt.savefig('plots/' + re.sub(r"\(.*\)", "", feature) + '_distribution.png', bbox_inches='tight',
-                        pad_inches=0.25, dpi=500, transparent=True)
-            plt.clf()
+        sb.histplot(data=data, x=feature, fill=False, element='step')
+        plt.savefig(folder_name + '/' + re.sub(r"\(.*\)", "", feature) + '_distribution.png',
+                    bbox_inches='tight',
+                    pad_inches=0.25, dpi=500, transparent=True)
+        plt.clf()
 
 
-if __name__ == '__main__':
-    plot_data_information()
-    plot_data_statistics()
-    # plot_speed_power_relation()
-    # plot_data_distribution()
+def plot_power_by_date(data, filename):
+    data['Active_Power'].interpolate().plot(figsize=(20, 5))
+
+    plt.savefig(filename)
+    plt.clf()
+
+
+def plot_loss(data, filename):
+    data['Loss'].interpolate().plot()
+
+    plt.savefig(filename)
+    plt.clf()
+
+
+def plot_power_daily_monthly(monthly, weekly, filename):
+    monthly['Active_Power'].interpolate().plot(label='monthly')
+    weekly['Active_Power'].interpolate().plot(label='weekly')
+    plt.title('Daily and Monthly Average Power Generated')
+    plt.ylabel('LV Power (kW)')
+    plt.xlabel('Date')
+    plt.legend()
+    plt.savefig(filename)
+    plt.clf()
+

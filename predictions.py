@@ -1,14 +1,13 @@
 import numpy as np
-import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from sklearn import metrics
 
 
-def feature_selection():
-    col_names = ["Date", "Active_Power", "Wind_Speed", "Theoretical_Power", "Wind_Direction"]
-    data = pd.read_csv("datasets/wind-turbine-scada-dataset/T1.csv", header=0, names=col_names)
+def feature_selection(data):
+    # col_names = ["Date", "Active_Power", "Wind_Speed", "Theoretical_Power", "Wind_Direction"]
+    # data = pd.read_csv("datasets/wind-turbine-scada-dataset/T1.csv", header=0, names=col_names)
     feature_cols = ['Wind_Speed', 'Wind_Direction', "Theoretical_Power"]
 
     # Select features
@@ -36,7 +35,7 @@ def linear_regression_model_building(X_train, X_test, y_train):
     return lr
 
 
-def model_evaluation(X_test, y_test, model):
+def model_evaluation(X_test, y_test, model, folder_name):
     y_pred = model.predict(X_test)
 
     print(f"Accuracy: {model.score(X_test, y_test)}")
@@ -61,12 +60,3 @@ def model_evaluation(X_test, y_test, model):
     plt.plot(x, y)
     plt.savefig('plots/lr_model.png', transparent=True)
 
-
-if __name__ == '__main__':
-    X, y = feature_selection()
-    X_train, X_test, y_train, y_test = data_splitting(X, y)
-    model = linear_regression_model_building(X_train, X_test, y_train)
-    model_evaluation(X_test, y_test, model)
-
-# ToDo prezicere in functie de vreme
-# ToDo Pretul per kw, cati bani se pot produce

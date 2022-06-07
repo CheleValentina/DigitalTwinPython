@@ -1,8 +1,9 @@
+import json
 from pprint import pprint
 
-from config import settings
 import requests
-import json
+
+from config import settings
 
 
 def get_data_for_city(city: str):

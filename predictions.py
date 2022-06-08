@@ -23,9 +23,7 @@ def feature_selection(data):
 
 def data_splitting(X, y):
     # Divide data into 70% training and 30% testing
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=1
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     return X_train, X_test, y_train, y_test
 
 
@@ -52,9 +50,7 @@ def model_evaluation(X_test, y_test, model, folder_name):
 
     print("Mean Absolute Error:", metrics.mean_absolute_error(y_test, y_pred))
     print("Mean Squared Error:", metrics.mean_squared_error(y_test, y_pred))
-    print(
-        "Root Mean Squared Error:", np.sqrt(metrics.mean_squared_error(y_test, y_pred))
-    )
+    print("Root Mean Squared Error:", np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
     # plot prediction and actual data
 
     plt.clf()
@@ -70,6 +66,6 @@ def model_evaluation(X_test, y_test, model, folder_name):
 def get_prediction(wind_speed, wind_degree, theoretical_power):
     model = load_model()
     prediction = model.predict(
-        np.array([[wind_speed, wind_degree, theoretical_power]])
+        np.array([[wind_speed, wind_degree, theoretical_power]], dtype=float)
     ).tolist()
     return prediction[0]

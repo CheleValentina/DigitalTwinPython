@@ -15,15 +15,12 @@ def index():
     return "OK"
 
 
-@app.route("/weather/<city>/", methods=["GET"])
-def get_for_city(city):
+@app.route("/weather/<city>/<theoretical_power>/", methods=["GET"])
+def get_for_city(city: str, theoretical_power: int):
     data = get_data_for_city(city)
 
-    # TODO replace theoretical power
-    t_p = 1500
-
-    prediction = get_prediction(data["wind_mps"], data["wind_degree"], t_p)
-    return jsonify(prediction)
+    prediction = get_prediction(data["wind_mps"], data["wind_degree"], theoretical_power)
+    return jsonify([prediction, round(data["wind_mps"], 2), round(data["wind_degree"], 2)])
 
 
 if __name__ == "__main__":

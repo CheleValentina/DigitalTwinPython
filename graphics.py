@@ -1,13 +1,9 @@
 import re
 
 import matplotlib.pyplot as plt
-import pandas as pd
 import seaborn as sb
 
 
-# ToDo before calling this function check the frequency of plotting the user wants - e.g hourly
-# ToDo before calling this function check the feature the user wants - e.g Active_Power, Loss
-# date type 2022-06-07
 def plot_data_between_date_interval(data, initial_date, last_date, feature, filename):
     data[initial_date:last_date][feature].plot(figsize=(15, 7))
     plt.savefig(filename, bbox_inches="tight", pad_inches=0.25, dpi=500)

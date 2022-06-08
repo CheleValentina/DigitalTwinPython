@@ -28,10 +28,8 @@ def data_splitting(X, y):
 
 
 def linear_regression_model_building(X_train, X_test, y_train):
-    # Create Decision Tree Classifier
     lr = LinearRegression()
 
-    # Train the Decision Tree Classifier
     lr.fit(X_train, y_train)
 
     return lr

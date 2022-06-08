@@ -1,8 +1,5 @@
-import numpy as np
 from flask import Flask, jsonify
 from flask_cors import CORS
-
-from ai_model import load_model
 from predictions import get_prediction
 from weather_api import get_data_for_city
 

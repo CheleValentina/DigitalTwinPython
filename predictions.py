@@ -22,7 +22,6 @@ def feature_selection(data):
 
 
 def data_splitting(X, y):
-    # Divide data into 70% training and 30% testing
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     return X_train, X_test, y_train, y_test
 
@@ -39,22 +38,17 @@ def model_evaluation(X_test, y_test, model, folder_name):
     y_pred = model.predict(X_test)
 
     print(f"Accuracy: {model.score(X_test, y_test)}")
-    # The coefficients
     print("Coefficients: \n", model.coef_)
-    # # The mean squared error
     print("Mean squared error: %.2f" % metrics.mean_squared_error(y_test, y_pred))
-    # # The coefficient of determination: 1 is perfect prediction
     print("Coefficient of determination: %.2f" % metrics.r2_score(y_test, y_pred))
 
     print("Mean Absolute Error:", metrics.mean_absolute_error(y_test, y_pred))
     print("Mean Squared Error:", metrics.mean_squared_error(y_test, y_pred))
     print("Root Mean Squared Error:", np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
-    # plot prediction and actual data
 
     plt.clf()
     plt.plot(y_test, y_pred, ".")
 
-    # plot a line, a perfit predict would all fall on this line
     x = np.linspace(0, 3500)
     y = x
     plt.plot(x, y)
